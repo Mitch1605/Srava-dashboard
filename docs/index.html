@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strava Run Dashboard — Mitchell Ryan</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0f;
+    --surface: #16161a;
+    --surface2: #1e1e24;
+    --border: rgba(255,255,255,0.07);
+    --text: #f0efe8;
+    --text-muted: #7a7a82;
+    --text-dim: #4a4a52;
+    --accent: #e8f55a;
+    --accent-dark: #c8d830;
+    --teal: #1fd9a0;
+    --amber: #f5a623;
+    --blue: #4d9fff;
+    --red: #ff5c5c;
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    gap: 1rem;
+  }
+
+  .logo-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .strava-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #fc4c02;
+    box-shadow: 0 0 12px #fc4c0260;
+    flex-shrink: 0;
+  }
+
+  .logo-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: var(--font-head);
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  .last-updated {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .target-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #1a1f0a 0%, #1a2010 100%);
+    border: 1px solid rgba(232,245,90,0.2);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .target-label {
+    font-size: 10px;
+    color: rgba(232,245,90,0.6);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .target-value {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+
+  .countdown-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .countdown-unit {
+    background: rgba(232,245,90,0.08);
+    border: 1px solid rgba(232,245,90,0.15);
+    border-radius: 6px;
+    padding: 4px 10px;
+    text-align: center;
+    min-width: 52px;
+  }
+
+  .countdown-num {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+
+  .countdown-lbl {
+    font-size: 9px;
+    color: rgba(232,245,90,0.5);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  #statusMsg {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+    min-height: 18px;
+  }
+
+  #statusMsg::before { content: '▸ '; color: var(--accent); }
+
+  #errorMsg {
+    background: rgba(255,92,92,0.08);
+    border: 1px solid rgba(255,92,92,0.2);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-size: 12px;
+    color: var(--red);
+    display: none;
+    margin-bottom: 1rem;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    padding: 1.25rem;
+    transition: background 0.15s;
+  }
+
+  .stat-card:hover { background: var(--surface2); }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: var(--font-head);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-sub { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.teal { color: var(--teal); }
+  .stat-value.amber { color: var(--amber); }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-title {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .chart-container { position: relative; width: 100%; height: 240px; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 0 0 1rem;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+  .legend-line { width: 16px; height: 1px; flex-shrink: 0; }
+
+  .run-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+
+  .run-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+
+  .run-item:last-child { border-bottom: none; }
+  .run-item:hover { background: var(--surface2); }
+
+  .run-name {
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .run-meta { font-size: 11px; color: var(--text-muted); letter-spacing: 0.03em; }
+  .run-diff { font-size: 10px; margin-top: 4px; }
+
+  .run-pace {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 700;
+    text-align: right;
+    letter-spacing: -0.02em;
+  }
+
+  .run-zone { font-size: 10px; color: var(--text-muted); text-align: right; margin-top: 2px; }
+
+  @media (max-width: 600px) {
+    .container { padding: 1.5rem 1rem; }
+    .header { flex-direction: column; }
+    h1 { font-size: 28px; }
+    .target-banner { flex-direction: column; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div>
+      <div class="logo-line">
+        <div class="strava-dot"></div>
+        <span class="logo-label">Strava · Auto-updated every 3 hrs</span>
+      </div>
+      <h1>Run <span>Dashboard</span></h1>
+      <p class="subtitle">Mitchell Ryan &nbsp;·&nbsp; TCS Sydney Marathon &nbsp;·&nbsp; 30 Aug 2026</p>
+      <p class="last-updated" id="lastUpdated"></p>
+    </div>
+  </div>
+
+  <div class="target-banner">
+    <div>
+      <div class="target-label">Goal</div>
+      <div class="target-value">Sub 3:14:59</div>
+    </div>
+    <div>
+      <div class="target-label">Target pace</div>
+      <div class="target-value">4:37 /km</div>
+    </div>
+    <div>
+      <div class="target-label">Easy ceiling</div>
+      <div class="target-value">5:52 /km</div>
+    </div>
+    <div>
+      <div class="target-label">Race day countdown</div>
+      <div class="countdown-wrap" id="countdown"></div>
+    </div>
+  </div>
+
+  <div id="statusMsg">Loading activity data...</div>
+  <div id="errorMsg"></div>
+
+  <div id="statGrid" class="stat-grid" style="display:none;"></div>
+
+  <div id="mainContent" style="display:none;">
+    <div class="section-header">
+      <span class="section-title">Pace — last 10 runs</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="legend" id="legend"></div>
+      <div class="chart-container">
+        <canvas id="paceChart" role="img" aria-label="Bar chart of recent run paces vs marathon target pace"></canvas>
+      </div>
+    </div>
+    <div class="section-header" style="margin-top:2rem;">
+      <span class="section-title">Recent runs</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="run-list" id="runList"></div>
+  </div>
+
+</div>
+<script>
+const TARGET_SEC = 4*60+37, EASY_SEC = 5*60+52;
+const RACE_DATE = new Date('2026-08-30T07:00:00+10:00');
+let chartInstance = null;
+
+function fmtPace(s) { const m=Math.floor(s/60),sec=Math.round(s%60); return m+':'+String(sec).padStart(2,'0')+'/km'; }
+function fmtDist(m) { return (m/1000).toFixed(2)+' km'; }
+function fmtDur(s) { const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60; return h>0?h+'h '+m+'m':m+'m '+sec+'s'; }
+function fmtDate(str) { return new Date(str).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}); }
+
+function zone(sec) {
+  if (sec<=TARGET_SEC) return {label:'Race pace or faster',color:'#1fd9a0'};
+  if (sec<=TARGET_SEC+60) return {label:'Tempo zone',color:'#f5a623'};
+  if (sec<=EASY_SEC) return {label:'Easy-moderate',color:'#4d9fff'};
+  return {label:'Easy',color:'#7a7a82'};
+}
+
+function countdown() {
+  const diff = RACE_DATE - new Date();
+  if (diff<=0) { document.getElementById('countdown').innerHTML='<span class="target-value">Race day!</span>'; return; }
+  const days=Math.floor(diff/86400000), hrs=Math.floor((diff%86400000)/3600000), mins=Math.floor((diff%3600000)/60000);
+  document.getElementById('countdown').innerHTML=`
+    <div class="countdown-unit"><span class="countdown-num">${days}</span><span class="countdown-lbl">days</span></div>
+    <div class="countdown-unit"><span class="countdown-num">${hrs}</span><span class="countdown-lbl">hrs</span></div>
+    <div class="countdown-unit"><span class="countdown-num">${mins}</span><span class="countdown-lbl">min</span></div>`;
+}
+countdown(); setInterval(countdown, 60000);
+
+async function loadData() {
+  try {
+    const res = await fetch('activities.json?t=' + Date.now());
+    if (!res.ok) throw new Error('activities.json not found — has the GitHub Action run yet?');
+    const activities = await res.json();
+
+    const runs = activities.filter(a => a.type==='Run' || a.sport_type==='Run');
+    if (!runs.length) { document.getElementById('statusMsg').textContent = 'No runs found in data.'; return; }
+
+    // Last updated from most recent activity fetch
+    const fetchTime = new Date(res.headers.get('last-modified') || Date.now());
+    document.getElementById('lastUpdated').textContent = 'Data last fetched: ' + fetchTime.toLocaleDateString('en-AU', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+    const totalKm = runs.reduce((s,r)=>s+r.distance,0)/1000;
+    const avgPace = runs.reduce((s,r)=>s+r.moving_time/(r.distance/1000),0)/runs.length;
+    const longest = Math.max(...runs.map(r=>r.distance))/1000;
+    const totalElev = runs.reduce((s,r)=>s+(r.total_elevation_gain||0),0);
+    const diff = avgPace - TARGET_SEC;
+
+    const grid = document.getElementById('statGrid');
+    grid.style.display = 'grid';
+    grid.innerHTML = [
+      ['Runs loaded', runs.length, 'last 30 activities', ''],
+      ['Total distance', totalKm.toFixed(1)+' km', 'all runs combined', 'accent'],
+      ['Avg pace', fmtPace(avgPace), (diff>0?'+':'')+fmtPace(Math.abs(diff))+' vs target', avgPace<=TARGET_SEC?'teal':''],
+      ['Longest run', longest.toFixed(1)+' km', '', ''],
+      ['Total elevation', Math.round(totalElev)+' m', 'cumulative gain', 'amber']
+    ].map(([l,v,s,c])=>`<div class="stat-card"><div class="stat-label">${l}</div><div class="stat-value ${c}">${v}</div>${s?`<div class="stat-sub">${s}</div>`:''}</div>`).join('');
+
+    const recent = runs.slice(0,10).reverse();
+    const labels = recent.map(r=>new Date(r.start_date_local).toLocaleDateString('en-AU',{day:'numeric',month:'short'}));
+    const pacesMins = recent.map(r=>parseFloat((r.moving_time/(r.distance/1000)/60).toFixed(3)));
+    const barColors = recent.map(r=>zone(r.moving_time/(r.distance/1000)).color);
+
+    if (chartInstance) { chartInstance.destroy(); chartInstance=null; }
+    chartInstance = new Chart(document.getElementById('paceChart'), {
+      type: 'bar',
+      data: { labels, datasets: [
+        {label:'Avg pace', data:pacesMins, backgroundColor:barColors, borderRadius:4, borderSkipped:false},
+        {label:'Target 4:37/km', data:Array(recent.length).fill(parseFloat((TARGET_SEC/60).toFixed(3))), type:'line', borderColor:'#1fd9a0', borderDash:[6,3], borderWidth:1.5, pointRadius:0, fill:false},
+        {label:'Easy ceiling', data:Array(recent.length).fill(parseFloat((EASY_SEC/60).toFixed(3))), type:'line', borderColor:'#4a4a52', borderDash:[3,3], borderWidth:1, pointRadius:0, fill:false}
+      ]},
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>{
+          if(ctx.datasetIndex===0){return 'Pace: '+fmtPace(ctx.raw*60);}
+          return ctx.dataset.label;
+        }}}},
+        scales: {
+          y: { reverse:true, grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#7a7a82', font:{family:"'DM Mono',monospace",size:11}, callback:v=>{const m=Math.floor(v),s=Math.round((v-m)*60);return m+':'+String(s).padStart(2,'0');}}},
+          x: { grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#7a7a82', font:{family:"'DM Mono',monospace",size:10}, maxRotation:45, autoSkip:false}}
+        }
+      }
+    });
+
+    document.getElementById('legend').innerHTML=`
+      <div class="legend-item"><div class="legend-dot" style="background:#1fd9a0;"></div>Race pace or faster</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f5a623;"></div>Tempo zone</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4d9fff;"></div>Easy-moderate</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7a7a82;"></div>Easy</div>
+      <div class="legend-item"><div class="legend-line" style="background:#1fd9a0;"></div>Target 4:37/km</div>
+      <div class="legend-item"><div class="legend-line" style="background:#4a4a52;"></div>Easy ceiling</div>`;
+
+    document.getElementById('runList').innerHTML = runs.slice(0,15).map(r=>{
+      const paceSec=r.moving_time/(r.distance/1000), z=zone(paceSec), d=paceSec-TARGET_SEC;
+      const diffStr = d>0
+        ? `<span style="color:#f5a623;">+${fmtPace(d)} off target</span>`
+        : `<span style="color:#1fd9a0;">${fmtPace(Math.abs(d))} under target</span>`;
+      return `<div class="run-item">
+        <div>
+          <div class="run-name">${r.name}</div>
+          <div class="run-meta">${fmtDate(r.start_date_local)} &nbsp;·&nbsp; ${fmtDist(r.distance)} &nbsp;·&nbsp; ${fmtDur(r.moving_time)} &nbsp;·&nbsp; ${Math.round(r.total_elevation_gain||0)}m elev</div>
+          <div class="run-diff">${diffStr}</div>
+        </div>
+        <div>
+          <div class="run-pace" style="color:${z.color};">${fmtPace(paceSec)}</div>
+          <div class="run-zone">${z.label}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('statusMsg').textContent = '';
+    document.getElementById('mainContent').style.display = 'block';
+
+  } catch(e) {
+    document.getElementById('statusMsg').textContent = '';
+    const err = document.getElementById('errorMsg');
+    err.textContent = 'Error: ' + e.message;
+    err.style.display = 'block';
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>
