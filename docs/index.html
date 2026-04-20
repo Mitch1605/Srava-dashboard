@@ -23,8 +23,6 @@
     background-size: 40px 40px; pointer-events: none; z-index: 0;
   }
   .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; position: relative; z-index: 1; }
-
-  /* Header */
   .header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2rem; gap: 1rem; }
   .logo-line { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
   .strava-dot { width: 10px; height: 10px; border-radius: 50%; background: #fc4c02; box-shadow: 0 0 12px #fc4c0260; flex-shrink: 0; }
@@ -33,19 +31,13 @@
   h1 span { color: var(--accent); }
   .subtitle { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
   .last-updated { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
-
-  /* Target banner */
   .target-banner { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 1px; background: rgba(232,245,90,0.1); border: 1px solid rgba(232,245,90,0.2); border-radius: 12px; overflow: hidden; margin-bottom: 2.5rem; }
   .target-cell { background: #111408; padding: 1rem 1.25rem; }
   .target-label { font-size: 10px; color: rgba(232,245,90,0.5); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
   .target-value { font-family: var(--font-head); font-size: 22px; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; }
-
-  /* Status */
   #statusMsg { font-size: 12px; color: var(--text-muted); margin-bottom: 1.5rem; min-height: 18px; }
   #statusMsg::before { content: '▸ '; color: var(--accent); }
   #errorMsg { background: rgba(255,92,92,0.08); border: 1px solid rgba(255,92,92,0.2); border-radius: 8px; padding: 1rem 1.25rem; font-size: 12px; color: var(--red); display: none; margin-bottom: 1rem; }
-
-  /* Stat grid */
   .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 2.5rem; }
   .stat-card { background: var(--surface); padding: 1.25rem; transition: background 0.15s; }
   .stat-card:hover { background: var(--surface2); }
@@ -55,21 +47,15 @@
   .stat-value.accent { color: var(--accent); }
   .stat-value.teal { color: var(--teal); }
   .stat-value.amber { color: var(--amber); }
-
-  /* Section header */
   .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
   .section-title { font-family: var(--font-head); font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
   .section-line { flex: 1; height: 1px; background: var(--border); }
-
-  /* Chart */
   .chart-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
   .chart-container { position: relative; width: 100%; height: 240px; }
   .legend { display: flex; flex-wrap: wrap; gap: 16px; padding: 0 0 1rem; font-size: 11px; color: var(--text-muted); }
   .legend-item { display: flex; align-items: center; gap: 6px; }
   .legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
   .legend-line { width: 16px; height: 1px; flex-shrink: 0; }
-
-  /* Run list */
   .run-list { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 2rem; }
   .run-item { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); transition: background 0.12s; }
   .run-item:last-child { border-bottom: none; }
@@ -79,54 +65,48 @@
   .run-diff { font-size: 10px; margin-top: 4px; }
   .run-pace { font-family: var(--font-head); font-size: 18px; font-weight: 700; text-align: right; letter-spacing: -0.02em; }
   .run-zone { font-size: 10px; color: var(--text-muted); text-align: right; margin-top: 2px; }
-
-  /* Schedule */
   .schedule-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
   .week-row { border-bottom: 1px solid var(--border); }
   .week-row:last-child { border-bottom: none; }
   .week-row.is-current { border-left: 3px solid var(--accent); background: rgba(232,245,90,0.03); }
-  .week-header { display: grid; grid-template-columns: 110px 90px 1fr; gap: 12px; align-items: center; padding: 0.85rem 1.25rem; cursor: pointer; transition: background 0.12s; user-select: none; }
+  .week-header { display: grid; grid-template-columns: 110px 95px 1fr; gap: 12px; align-items: center; padding: 0.85rem 1.25rem; cursor: pointer; transition: background 0.12s; user-select: none; }
   .week-header:hover { background: var(--surface2); }
   .week-num { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--text-muted); }
   .week-num.current { color: var(--accent); }
   .week-phase { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; text-align: center; white-space: nowrap; }
-  .phase-base  { background: rgba(77,159,255,0.12); color: var(--blue); }
-  .phase-build { background: rgba(245,166,35,0.12); color: var(--amber); }
-  .phase-peak  { background: rgba(255,92,92,0.12); color: var(--red); }
-  .phase-taper { background: rgba(31,217,160,0.12); color: var(--teal); }
-  .phase-race  { background: rgba(232,245,90,0.12); color: var(--accent); }
+  .phase-base  { background: rgba(77,159,255,0.12);  color: var(--blue); }
+  .phase-build { background: rgba(245,166,35,0.12);  color: var(--amber); }
+  .phase-peak  { background: rgba(255,92,92,0.12);   color: var(--red); }
+  .phase-taper { background: rgba(31,217,160,0.12);  color: var(--teal); }
+  .phase-race  { background: rgba(232,245,90,0.12);  color: var(--accent); }
   .week-meta { font-size: 12px; color: var(--text-muted); }
   .week-meta .km { color: var(--text); font-weight: 500; }
-
   .week-body { display: none; border-top: 1px solid var(--border); }
   .week-body.open { display: block; }
-
   .session-block { padding: 0.75rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.03); }
   .session-block:last-child { border-bottom: none; }
   .session-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
   .session-day-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); width: 28px; flex-shrink: 0; }
   .session-name { font-size: 13px; font-weight: 500; }
-  .stype-easy   { color: var(--blue); }
-  .stype-long   { color: var(--amber); }
-  .stype-tempo  { color: var(--purple); }
-  .stype-hill   { color: var(--red); }
-  .stype-rest   { color: var(--text-dim); }
-  .stype-taper  { color: var(--teal); }
-  .stype-race   { color: var(--accent); }
-
+  .stype-easy  { color: var(--blue); }
+  .stype-long  { color: var(--amber); }
+  .stype-tempo { color: var(--purple); }
+  .stype-hill  { color: var(--red); }
+  .stype-rest  { color: var(--text-dim); }
+  .stype-taper { color: var(--teal); }
+  .stype-race  { color: var(--accent); }
   .session-targets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; padding-left: 38px; }
   .target-pill { font-size: 10px; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.04em; }
-  .pill-dist  { background: rgba(77,159,255,0.1);  color: var(--blue); }
-  .pill-pace  { background: rgba(31,217,160,0.1);  color: var(--teal); }
-  .pill-hr    { background: rgba(255,92,92,0.1);   color: var(--red); }
-  .pill-effort{ background: rgba(245,166,35,0.1);  color: var(--amber); }
-  .pill-struct{ background: rgba(192,132,252,0.1); color: var(--purple); }
-
-  @media (max-width: 600px) {
+  .pill-dist   { background: rgba(77,159,255,0.1);   color: var(--blue); }
+  .pill-pace   { background: rgba(31,217,160,0.1);   color: var(--teal); }
+  .pill-hr     { background: rgba(255,92,92,0.1);    color: var(--red); }
+  .pill-effort { background: rgba(245,166,35,0.1);   color: var(--amber); }
+  .pill-struct { background: rgba(192,132,252,0.1);  color: var(--purple); }
+  @media (max-width:600px) {
     .container { padding: 1.5rem 1rem; }
     .header { flex-direction: column; }
     h1 { font-size: 28px; }
-    .week-header { grid-template-columns: 80px 70px 1fr; gap: 8px; }
+    .week-header { grid-template-columns: 80px 75px 1fr; gap: 8px; }
   }
 </style>
 </head>
@@ -174,7 +154,7 @@
 
   <div style="margin-top:3rem;">
     <div class="section-header">
-      <span class="section-title">Training schedule — 23 weeks</span>
+      <span class="section-title">Training schedule — 19 weeks</span>
       <div class="section-line"></div>
     </div>
     <p style="font-size:11px;color:var(--text-dim);margin-bottom:1rem;">Click any week to expand full session details. Current week highlighted in yellow.</p>
@@ -188,119 +168,95 @@ const RACE_DATE=new Date('2026-08-30T07:00:00+10:00');
 const BLOCK_START=new Date('2026-04-13T00:00:00+10:00');
 let chartInstance=null;
 
-// ─────────────────────────────────────────────
-// TRAINING PLAN — 23 weeks from 23 Mar 2026
-// Mon: ~9km easy (daycare drop)
-// Tue: easy run
-// Wed: easy run
-// Thu: alternating tempo / hill (base weeks = hill only)
-// Fri: rest
-// Sat: long run
-// Sun: rest
+// ─────────────────────────────────────────────────────────────
+// 19-WEEK TRAINING PLAN — starts 20 April 2026 (Week 1)
+// Mon:  ~9km easy (daycare drop)        HR Z1  120–138 bpm
+// Tue:  easy run                        HR Z1  120–138 bpm
+// Wed:  easy run                        HR Z1  120–138 bpm
+// Thu:  hill (wks 1–3) then alt         HR Z3–Z5
+// Fri:  REST
+// Sat:  long run                        HR Z2  138–148 bpm
+// Sun:  REST
 //
-// HR zones (estimated max HR ~185):
-// Z1 Easy:    65–75% = ~120–138 bpm
-// Z2 Aerobic: 75–80% = ~138–148 bpm
-// Z3 Tempo:   80–87% = ~148–161 bpm
-// Z4 Race:    87–92% = ~161–170 bpm
-// Z5 Hill:    88–93% = ~163–172 bpm
-// ─────────────────────────────────────────────
+// HR zones (est. max HR ~185 bpm):
+// Z1 Easy:     65–75%  = 120–138 bpm
+// Z2 Aerobic:  75–80%  = 138–148 bpm
+// Z3 Tempo:    80–87%  = 148–161 bpm
+// Z4 Race:     87–92%  = 161–170 bpm
+// Z5 Hill rep: 88–93%  = 163–172 bpm
+// ─────────────────────────────────────────────────────────────
+
+const E='easy',L='long',T='tempo',H='hill',R='rest',TAP='taper',RACE='race';
 
 function s(day,type,name,dist,pace,hr,effort,struct){
   return {day,type,name,dist,pace,hr,effort,struct};
 }
 
-// Helper abbreviations
-const E='easy', L='long', T='tempo', H='hill', R='rest', TAP='taper', RACE='race';
-
 const PLAN=[
-  // ── PHASE 1: BASE BUILD (Weeks 1–6) ──
-  // Thu = hills only, no tempo yet. Long runs conservative.
-  {week:1,start:'2026-03-23',phase:'base',km:44,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational, very easy',null),
-    s('Tue',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Should feel effortless',null),
-    s('Wed',E,'Easy run','6km','5:45–6:10/km','HR 120–138 bpm (Z1)','Shorter than Tuesday, stay easy',null),
-    s('Thu',H,'Hill repeats','8km total','Hard effort up, easy jog down','HR 163–172 bpm on reps (Z5)','6 × hill reps up your 350m local hill','Warm up 1.5km · 6 reps · cool down 1.5km'),
+
+  // ── BASE BUILD (Weeks 1–3) ──────────────────────────────
+  {week:1,start:'2026-04-20',phase:'base',km:49,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational, no pushing — sets tone for the week',null),
+    s('Tue',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy effort — should feel effortless',null),
+    s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Shorter than Tuesday, stay easy',null),
+    s('Thu',H,'Hill repeats','9km total','Hard effort up, easy jog recovery down','HR 163–172 bpm on reps (Z5)','8 × hill reps up your 350m local hill — focus on form not speed','Warm up 1.5km easy · 8 reps · cool down 1.5km easy'),
     s('Fri',R,'Rest','–','–','–','Full rest or light stretching',null),
-    s('Sat',L,'Long run','14km','5:45–6:10/km','HR 138–148 bpm (Z2, keep under 150)','Comfortable aerobic effort throughout','Fuel every 5km from week 5 onwards'),
-    s('Sun',R,'Rest','–','–','–','Recover before Monday run',null),
+    s('Sat',L,'Long run','16km','5:45–6:10/km','HR 138–148 bpm (Z2, keep under 150)','Patient aerobic effort — if HR drifts above 150 slow down','Fuel every 5km — start practising your race nutrition'),
+    s('Sun',R,'Rest','–','–','–','Full rest — protect the long run recovery',null),
   ]},
-  {week:2,start:'2026-03-30',phase:'base',km:45,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
-    s('Tue',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy effort',null),
-    s('Wed',E,'Easy run','6km','5:45–6:10/km','HR 120–138 bpm (Z1)','Shorter recovery run',null),
-    s('Thu',H,'Hill repeats','8km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','7 × hill reps','Warm up 1.5km · 7 reps · cool down 1.5km'),
-    s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','14km','5:45–6:10/km','HR 138–148 bpm (Z2)','Steady aerobic pace',null),
-    s('Sun',R,'Rest','–','–','–','Full rest',null),
-  ]},
-  {week:3,start:'2026-04-06',phase:'base',km:46,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
-    s('Tue',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Wed',E,'Easy run','6km','5:45–6:10/km','HR 120–138 bpm (Z1)','Short and easy',null),
-    s('Thu',H,'Hill repeats','9km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','8 × hill reps','Warm up 1.5km · 8 reps · cool down 1.5km'),
-    s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','14km','5:45–6:10/km','HR 138–148 bpm (Z2)','Keep HR honest — no drifting above 150',null),
-    s('Sun',R,'Rest','–','–','–','Full rest',null),
-  ]},
-  {week:4,start:'2026-04-13',phase:'base',km:49,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational, no pushing',null),
-    s('Tue',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy effort',null),
-    s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Shorter than Tuesday',null),
-    s('Thu',H,'Hill repeats','9km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','8 × hill reps','Warm up 1.5km · 8 reps · cool down 1.5km'),
-    s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','16km','5:45–6:10/km','HR 138–148 bpm (Z2)','First step up — stay patient with pace',null),
-    s('Sun',R,'Rest','–','–','–','Full rest',null),
-  ]},
-  {week:5,start:'2026-04-20',phase:'base',km:50,sessions:[
+
+  {week:2,start:'2026-04-27',phase:'base',km:50,sessions:[
     s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
     s('Tue',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
     s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Short and easy',null),
-    s('Thu',H,'Hill repeats','10km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','9 × hill reps','Warm up 1.5km · 9 reps · cool down 1.5km'),
+    s('Thu',H,'Hill repeats','10km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','9 × hill reps — one more than last week','Warm up 1.5km · 9 reps · cool down 1.5km'),
     s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','16km','5:45–6:10/km','HR 138–148 bpm (Z2)','Start practising fuelling every 5km',null),
-    s('Sun',R,'Rest','–','–','–','Full rest',null),
-  ]},
-  {week:6,start:'2026-04-27',phase:'base',km:52,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
-    s('Tue',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Thu',H,'Hill repeats','11km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','10 × hill reps — max hill volume','Warm up 1.5km · 10 reps · cool down 1.5km'),
-    s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','16km','5:45–6:10/km','HR 138–148 bpm (Z2)','Comfortable aerobic, fuel every 5km',null),
+    s('Sat',L,'Long run','16km','5:45–6:10/km','HR 138–148 bpm (Z2)','Steady aerobic pace, fuel every 5km',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
 
-  // ── PHASE 2: BUILD (Weeks 7–14) ──
-  // Thu alternates tempo/hill. Long runs step up.
-  {week:7,start:'2026-05-04',phase:'build',km:55,sessions:[
+  {week:3,start:'2026-05-04',phase:'base',km:52,sessions:[
     s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
     s('Tue',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Wed',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Thu',T,'Tempo run','11km total','4:50–5:10/km tempo pace','HR 148–161 bpm (Z3)','First tempo — comfortably hard, short sentences only','Warm up 2km easy · 15 min tempo block · cool down 2km easy'),
+    s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',H,'Hill repeats','11km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','10 × hill reps — max hill volume for base phase','Warm up 1.5km · 10 reps · cool down 1.5km'),
     s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','18km','5:45–6:10/km','HR 138–148 bpm (Z2)','Fuel every 5km, keep Z2 throughout',null),
+    s('Sat',L,'Long run','16km','5:45–6:10/km','HR 138–148 bpm (Z2)','Hold even effort throughout, fuel every 5km',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
-  {week:8,start:'2026-05-11',phase:'build',km:56,sessions:[
+
+  // ── BUILD (Weeks 4–11) ──────────────────────────────────
+  {week:4,start:'2026-05-11',phase:'build',km:55,sessions:[
     s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
     s('Tue',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
     s('Wed',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Thu',H,'Hill repeats','11km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','8 × hill reps — maintaining hill work','Warm up 1.5km · 8 reps · cool down 1.5km'),
+    s('Thu',T,'Tempo run','11km total','4:50–5:10/km for tempo block','HR 148–161 bpm (Z3)','First tempo — comfortably hard, can speak in short sentences only','Warm up 2km easy · 15 min tempo block · cool down 2km easy'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','18km','5:45–6:10/km','HR 138–148 bpm (Z2)','First 18km — patience with pace, fuel every 5km',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+
+  {week:5,start:'2026-05-18',phase:'build',km:56,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',H,'Hill repeats','11km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','8 × hill reps — maintaining hill strength','Warm up 1.5km · 8 reps · cool down 1.5km'),
     s('Fri',R,'Rest','–','–','–','Full rest',null),
     s('Sat',L,'Long run','18km','5:45–6:10/km','HR 138–148 bpm (Z2)','Fuel every 5km',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
-  {week:9,start:'2026-05-18',phase:'build',km:59,sessions:[
+
+  {week:6,start:'2026-05-25',phase:'build',km:59,sessions:[
     s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
     s('Tue',E,'Easy run','10km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
     s('Wed',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Thu',T,'Tempo run','12km total','4:50–5:10/km tempo','HR 148–161 bpm (Z3)','20 min tempo block','Warm up 2km · 20 min tempo · cool down 2km'),
+    s('Thu',T,'Tempo run','12km total','4:50–5:10/km for tempo block','HR 148–161 bpm (Z3)','20 min tempo block — building threshold','Warm up 2km · 20 min tempo · cool down 2km'),
     s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','21km','5:45–6:10/km','HR 138–148 bpm (Z2)','First 21km — take it easy, fuel every 5km',null),
+    s('Sat',L,'Long run','21km','5:45–6:10/km','HR 138–148 bpm (Z2)','First 21km — take it steady, fuel every 5km',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
-  {week:10,start:'2026-05-25',phase:'build',km:60,sessions:[
+
+  {week:7,start:'2026-06-01',phase:'build',km:60,sessions:[
     s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
     s('Tue',E,'Easy run','10km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
     s('Wed',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
@@ -309,25 +265,28 @@ const PLAN=[
     s('Sat',L,'Long run','21km','5:45–6:10/km','HR 138–148 bpm (Z2)','Steady, fuel every 5km',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
-  {week:11,start:'2026-06-01',phase:'build',km:50,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational — recovery week',null),
-    s('Tue',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy, lighter week',null),
+
+  {week:8,start:'2026-06-08',phase:'build',km:50,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Recovery week — keep it honest and easy',null),
+    s('Tue',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy — lighter week, let the body adapt',null),
     s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Short and easy',null),
-    s('Thu',H,'Hill repeats','8km total','Moderate hill effort','HR 155–165 bpm (keep it easier this week)','6 × hill reps — recovery week, pull back effort','Warm up 1.5km · 6 reps · cool down 1.5km'),
+    s('Thu',H,'Hill repeats','8km total','Moderate-hard effort — slightly pulled back','HR 155–165 bpm (easier recovery week)','6 × hill reps — recovery week, don\'t max out','Warm up 1.5km · 6 reps · cool down 1.5km'),
     s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','18km','5:45–6:10/km','HR 138–148 bpm (Z2)','Recovery week long run — feel good, don\'t push',null),
+    s('Sat',L,'Long run','18km','5:45–6:10/km','HR 138–148 bpm (Z2)','Recovery long run — should feel comfortable, not grinding',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
-  {week:12,start:'2026-06-08',phase:'build',km:63,sessions:[
+
+  {week:9,start:'2026-06-15',phase:'build',km:63,sessions:[
     s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
     s('Tue',E,'Easy run','11km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
     s('Wed',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Thu',T,'Tempo run','12km total','4:50–5:10/km tempo','HR 148–161 bpm (Z3)','25 min tempo block — pushing the threshold','Warm up 2km · 25 min tempo · cool down 2km'),
+    s('Thu',T,'Tempo run','12km total','4:50–5:10/km for tempo block','HR 148–161 bpm (Z3)','25 min tempo block — pushing threshold further','Warm up 2km · 25 min tempo · cool down 2km'),
     s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','24km','5:45–6:10/km','HR 138–148 bpm (Z2)','Big step up — patience with pace, fuel every 5km',null),
+    s('Sat',L,'Long run','24km','5:45–6:10/km','HR 138–148 bpm (Z2)','Big step up — patience early, fuel every 5km',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
-  {week:13,start:'2026-06-15',phase:'build',km:65,sessions:[
+
+  {week:10,start:'2026-06-22',phase:'build',km:65,sessions:[
     s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
     s('Tue',E,'Easy run','11km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
     s('Wed',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
@@ -336,101 +295,98 @@ const PLAN=[
     s('Sat',L,'Long run','24km','5:45–6:10/km','HR 138–148 bpm (Z2)','Hold even effort, fuel every 5km',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
-  {week:14,start:'2026-06-22',phase:'build',km:67,sessions:[
+
+  {week:11,start:'2026-06-29',phase:'build',km:67,sessions:[
     s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
     s('Tue',E,'Easy run','12km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
     s('Wed',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Thu',T,'Tempo run','13km total','4:50–5:10/km tempo','HR 148–161 bpm (Z3)','30 min tempo block','Warm up 2km · 30 min tempo · cool down 2km'),
+    s('Thu',T,'Tempo run','13km total','4:50–5:10/km for tempo block','HR 148–161 bpm (Z3)','30 min tempo block — longest tempo so far','Warm up 2km · 30 min tempo · cool down 2km'),
     s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','26km','5:45–6:10/km','HR 138–148 bpm (Z2)','Longest to date — stick to easy pace, fuel every 5km',null),
+    s('Sat',L,'Long run','26km','5:45–6:10/km','HR 138–148 bpm (Z2)','Biggest run to date — break into 3 segments mentally, fuel every 5km',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
 
-  // ── PHASE 3: PEAK (Weeks 15–20) ──
-  {week:15,start:'2026-06-29',phase:'peak',km:69,sessions:[
+  // ── PEAK (Weeks 12–16) ─────────────────────────────────
+  {week:12,start:'2026-07-06',phase:'peak',km:69,sessions:[
     s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
     s('Tue',E,'Easy run','12km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
     s('Wed',E,'Easy run','10km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Thu',H,'Hill repeats','12km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','10 × hill reps','Warm up 1.5km · 10 reps · cool down 1.5km'),
+    s('Thu',H,'Hill repeats','12km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','10 × hill reps — peak quality session','Warm up 1.5km · 10 reps · cool down 1.5km'),
     s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','28km','5:45–6:10/km','HR 138–148 bpm (Z2)','Mental focus session — break into 3 × 9km blocks',null),
+    s('Sat',L,'Long run','28km','5:45–6:10/km','HR 138–148 bpm (Z2)','Mental focus run — break into 3 × 9km blocks, fuel every 5km',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
-  {week:16,start:'2026-07-06',phase:'peak',km:55,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Recovery week — easy',''),
+
+  {week:13,start:'2026-07-13',phase:'peak',km:55,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Recovery week — keep it very easy',null),
     s('Tue',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy, lighter week',null),
     s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Short and easy',null),
-    s('Thu',T,'Tempo run','10km total','4:50–5:10/km tempo','HR 148–161 bpm (Z3)','20 min tempo — lighter recovery week version','Warm up 2km · 20 min tempo · cool down 2km'),
+    s('Thu',T,'Tempo run — recovery week','10km total','4:50–5:10/km for tempo block','HR 148–161 bpm (Z3)','20 min tempo only — lighter version this week','Warm up 2km · 20 min tempo · cool down 2km'),
     s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','20km','5:45–6:10/km','HR 138–148 bpm (Z2)','Recovery week long run — feel fresh',null),
+    s('Sat',L,'Long run','20km','5:45–6:10/km','HR 138–148 bpm (Z2)','Recovery long run — feel fresh and strong',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
-  {week:17,start:'2026-07-13',phase:'peak',km:68,sessions:[
+
+  {week:14,start:'2026-07-20',phase:'peak',km:68,sessions:[
     s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
     s('Tue',E,'Easy run','13km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
     s('Wed',E,'Easy run','10km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Thu',H,'Hill repeats','11km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','10 × hill reps — peak hill session','Warm up 1.5km · 10 reps · cool down 1.5km'),
-    s('Fri',R,'Rest','–','–','–','Full rest — big day tomorrow',null),
-    s('Sat',L,'Long run','32km','5:45–6:10/km','HR 138–148 bpm (Z2)','Biggest run yet — fuel every 5km, break into segments mentally',null),
-    s('Sun',R,'Rest','–','–','–','Extended rest — 32km recovery',null),
+    s('Thu',H,'Hill repeats','11km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','10 × hill reps — big week, quality matters','Warm up 1.5km · 10 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest — biggest run of the block tomorrow',null),
+    s('Sat',L,'Long run','32km','5:45–6:10/km','HR 138–148 bpm (Z2)','Major milestone — fuel every 5km, walk 1 min at halfway if needed, stay patient',null),
+    s('Sun',R,'Rest','–','–','–','Extended rest — 32km takes real recovery',null),
   ]},
-  {week:18,start:'2026-07-20',phase:'peak',km:70,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Keep it very easy after 32km Saturday',null),
+
+  {week:15,start:'2026-07-27',phase:'peak',km:70,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Very easy after 32km Saturday',null),
     s('Tue',E,'Easy run','13km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
     s('Wed',E,'Easy run','10km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Thu',T,'Tempo run','13km total','4:50–5:10/km tempo','HR 148–161 bpm (Z3)','35 min tempo — peak tempo effort','Warm up 2km · 35 min tempo · cool down 2km'),
-    s('Fri',R,'Rest','–','–','–','Full rest — peak long run tomorrow',null),
-    s('Sat',L,'Long run — PEAK','34km','5:45–6:10/km','HR 138–148 bpm (Z2)','PEAK RUN — fuel every 5km, walk 1 min at 20km if needed, finish strong',null),
-    s('Sun',R,'Rest','–','–','–','Extended rest — this is the most important recovery weekend of the block',null),
+    s('Thu',T,'Tempo run','13km total','4:50–5:10/km for tempo block','HR 148–161 bpm (Z3)','35 min tempo — peak tempo effort of the block','Warm up 2km · 35 min tempo · cool down 2km'),
+    s('Fri',R,'Rest','–','–','–','Full rest — PEAK long run tomorrow',null),
+    s('Sat',L,'Long run — PEAK 34km','34km','5:45–6:10/km','HR 138–148 bpm (Z2)','PEAK RUN — fuel every 5km, walk 60 sec at 20km if needed, finish the last 4km strong',null),
+    s('Sun',R,'Rest','–','–','–','Most important recovery weekend of the block — sleep, eat, elevate legs',null),
   ]},
-  {week:19,start:'2026-07-27',phase:'peak',km:56,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Very easy after peak week',null),
+
+  {week:16,start:'2026-08-03',phase:'peak',km:57,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Very easy — post-peak recovery week',null),
     s('Tue',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
     s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Short and easy',null),
-    s('Thu',H,'Hill repeats','9km total','Moderate-hard effort','HR 155–165 bpm (slightly easier post-peak)','6 × hill reps — recovery week','Warm up 1.5km · 6 reps · cool down 1.5km'),
+    s('Thu',H,'Hill repeats — recovery week','9km total','Moderate-hard effort','HR 155–165 bpm (Z4 low — slightly easier)','6 × hill reps only — recovery week, don\'t overdo it','Warm up 1.5km · 6 reps · cool down 1.5km'),
     s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run','22km','5:45–6:10/km','HR 138–148 bpm (Z2)','Recovery long run — feel strong, not tired',null),
-    s('Sun',R,'Rest','–','–','–','Full rest',null),
-  ]},
-  {week:20,start:'2026-08-03',phase:'peak',km:59,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
-    s('Tue',E,'Easy run','12km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Wed',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
-    s('Thu',T,'Tempo run','13km total','4:45–5:00/km tempo — starting to sharpen','HR 148–163 bpm (Z3–Z4 border)','30 min tempo at slightly sharper effort','Warm up 2km · 30 min tempo · cool down 2km'),
-    s('Fri',R,'Rest','–','–','–','Full rest — taper begins next week',null),
-    s('Sat',L,'Long run','16km','5:30–5:45/km — slightly sharper','HR 138–150 bpm (Z2)','Last moderate long run — feel race-ready',null),
+    s('Sat',L,'Long run','22km','5:45–6:00/km','HR 138–148 bpm (Z2)','Feel strong and fresh — this should feel easier than the last few weeks',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
 
-  // ── PHASE 4: TAPER (Weeks 21–22) ──
-  {week:21,start:'2026-08-10',phase:'taper',km:46,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Taper begins — resist urge to do more',null),
-    s('Tue',TAP,'Taper easy run','8km','5:45–6:00/km','HR 120–138 bpm (Z1)','Easy and fresh',null),
-    s('Wed',TAP,'Taper easy run','6km','5:45–6:00/km','HR 120–138 bpm (Z1)','Short, easy, shake out the legs',null),
-    s('Thu',T,'Short tempo sharpener','8km total','4:45–5:00/km for tempo block','HR 148–158 bpm (Z3)','15 min tempo only — keep sharpness without fatigue','Warm up 2km · 15 min tempo · cool down 2km'),
+  // ── TAPER (Weeks 17–18) ────────────────────────────────
+  {week:17,start:'2026-08-10',phase:'taper',km:44,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:00/km','HR 120–138 bpm (Z1)','Taper begins — resist the urge to do extra',null),
+    s('Tue',TAP,'Taper easy run','7km','5:45–6:00/km','HR 120–138 bpm (Z1)','Easy and fresh',null),
+    s('Wed',TAP,'Taper easy run','5km','5:45–6:00/km','HR 120–138 bpm (Z1)','Short shakeout',null),
+    s('Thu',T,'Sharpener — short tempo','8km total','4:45–5:00/km for tempo block','HR 148–158 bpm (Z3)','15 min tempo only — keep sharpness without building fatigue','Warm up 2km · 15 min tempo · cool down 2km'),
     s('Fri',R,'Rest','–','–','–','Full rest',null),
-    s('Sat',L,'Long run — taper','15km','5:30–5:45/km','HR 138–148 bpm (Z2)','Confidence run — should feel easy',null),
+    s('Sat',L,'Taper long run','15km','5:30–5:45/km','HR 138–148 bpm (Z2)','Confidence run — should feel controlled and easy at this distance',null),
     s('Sun',R,'Rest','–','–','–','Full rest',null),
   ]},
-  {week:22,start:'2026-08-17',phase:'taper',km:30,sessions:[
-    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:00/km','HR 120–138 bpm (Z1)','Very easy — final taper week',null),
-    s('Tue',TAP,'Taper easy run','6km','5:45–6:00/km','HR 120–138 bpm (Z1)','Easy, short',null),
-    s('Wed',TAP,'Taper easy run','5km','5:45–6:00/km','HR 120–138 bpm (Z1)','Very short shakeout',null),
-    s('Thu',TAP,'Sharpener','5km total','Include 4 × 1 min at race pace (4:35–4:40/km) with 2 min easy recovery','HR 161–170 bpm briefly (Z4) during strides','Short strides to remind legs of race pace','10 min easy warm up · 4 strides · 10 min easy cool down'),
+
+  {week:18,start:'2026-08-17',phase:'taper',km:28,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:00/km','HR 120–138 bpm (Z1)','Final taper week — very easy',null),
+    s('Tue',TAP,'Taper easy run','5km','5:45–6:00/km','HR 120–138 bpm (Z1)','Easy, short',null),
+    s('Wed',TAP,'Taper easy run','4km','5:45–6:00/km','HR 120–138 bpm (Z1)','Very short shakeout',null),
+    s('Thu',TAP,'Race-pace strides','4km total','Include 4 × 1 min at race pace (4:35–4:40/km) with 90 sec easy recovery','HR 161–170 bpm briefly (Z4) during strides only','Short strides to remind legs of race pace — nothing more','10 min easy · 4 × 1 min strides · 10 min easy'),
     s('Fri',R,'Rest','–','–','–','Full rest — race week starts Monday',null),
-    s('Sat',TAP,'Shakeout run','5km','5:45–6:00/km','HR 120–130 bpm (Z1)','Very easy shakeout — just wake up the legs',null),
-    s('Sun',R,'Rest','–','–','–','Rest, hydrate, eat well',null),
+    s('Sat',TAP,'Shakeout run','5km','5:45–6:00/km','HR 120–130 bpm (Z1)','Very easy shakeout — just keep legs loose',null),
+    s('Sun',R,'Rest','–','–','–','Rest, hydrate well, eat well',null),
   ]},
 
-  // ── RACE WEEK (Week 23) ──
-  {week:23,start:'2026-08-24',phase:'race',km:42,sessions:[
-    s('Mon',TAP,'Easy shakeout','4km','6:00/km','HR 120–130 bpm (Z1)','Very easy, stay loose',null),
+  // ── RACE WEEK (Week 19) ────────────────────────────────
+  {week:19,start:'2026-08-24',phase:'race',km:42,sessions:[
+    s('Mon',TAP,'Easy shakeout','4km','6:00/km','HR 120–130 bpm (Z1)','Very easy, stay loose — no more fitness to gain',null),
     s('Tue',R,'Rest','–','–','–','Full rest — trust your training',null),
-    s('Wed',TAP,'Easy shakeout','3km','6:00/km','HR 120–130 bpm (Z1)','Short, easy — just move the legs',null),
+    s('Wed',TAP,'Easy shakeout','3km','6:00/km','HR 120–130 bpm (Z1)','Short and easy — just move the legs',null),
     s('Thu',R,'Rest','–','–','–','Full rest — legs up when possible',null),
     s('Fri',R,'Rest','–','–','–','Full rest — sleep, hydrate, eat carbs',null),
-    s('Sat',R,'Rest — race eve','–','–','–','Lay out race kit, eat your carb dinner, sleep early',null),
-    s('Sun',RACE,'RACE DAY — TCS Sydney Marathon','42.2km','4:35–4:40/km (sub 3:14:59 pace)','HR 161–170 bpm (Z4) — hold steady','Start conservatively, negative split, push from 30km','North Sydney → Harbour Bridge → CBD → Opera House'),
+    s('Sat',R,'Rest — race eve','–','–','–','Lay out race kit, eat carb-heavy dinner, sleep early',null),
+    s('Sun',RACE,'RACE DAY — TCS Sydney Marathon','42.2km','4:35–4:40/km (sub 3:14:59 pace)','HR 161–170 bpm (Z4) — hold steady throughout','Start conservatively for first 10km, negative split from 21km, push hard from 32km','North Sydney start → Harbour Bridge → CBD → Opera House finish'),
   ]},
 ];
 
@@ -485,17 +441,17 @@ function buildSchedule(){
           </div>
         </div>`;
       }
-      const typeClass='stype-'+(sess.type===T?'tempo':sess.type===H?'hill':sess.type===L?'long':sess.type==='race'?'race':sess.type==='taper'?'taper':'easy');
+      const tc=sess.type===T?'tempo':sess.type===H?'hill':sess.type===L?'long':sess.type===RACE?'race':sess.type===TAP?'taper':'easy';
       return `<div class="session-block">
         <div class="session-header">
           <span class="session-day-badge">${sess.day}</span>
-          <span class="session-name ${typeClass}">${sess.name}</span>
+          <span class="session-name stype-${tc}">${sess.name}</span>
         </div>
         <div class="session-targets">
-          ${sess.dist!=='–'?pill('pill-dist',sess.dist):''}
-          ${sess.pace!=='–'?pill('pill-pace',sess.pace):''}
-          ${sess.hr!=='–'?pill('pill-hr',sess.hr):''}
-          ${sess.effort!=='–'?pill('pill-effort',sess.effort):''}
+          ${sess.dist&&sess.dist!=='–'?pill('pill-dist',sess.dist):''}
+          ${sess.pace&&sess.pace!=='–'?pill('pill-pace',sess.pace):''}
+          ${sess.hr&&sess.hr!=='–'?pill('pill-hr',sess.hr):''}
+          ${sess.effort&&sess.effort!=='–'?pill('pill-effort',sess.effort):''}
           ${sess.struct?pill('pill-struct',sess.struct):''}
         </div>
       </div>`;
@@ -503,7 +459,7 @@ function buildSchedule(){
 
     return `<div class="week-row${isCurrent?' is-current':''}">
       <div class="week-header" onclick="toggleWeek(${w.week})">
-        <span class="week-num${isCurrent?' current':''}">Wk ${w.week}${isCurrent?' ◀':''}</span>
+        <span class="week-num${isCurrent?' current':''}">Wk ${w.week} of 19${isCurrent?' ◀':''}</span>
         <span class="week-phase phase-${w.phase}">${PHASE_LABELS[w.phase]}</span>
         <span class="week-meta"><span class="km">${w.km}km</span> · ${dateRange}</span>
       </div>
@@ -527,7 +483,7 @@ async function loadData(){
     document.getElementById('lastUpdated').textContent='Showing runs from training block (13 Apr 2026 onwards)';
 
     if(!runs.length){
-      document.getElementById('statusMsg').textContent='No training block runs found yet.';
+      document.getElementById('statusMsg').textContent='No training block runs found yet — week 1 starts now!';
       return;
     }
 
