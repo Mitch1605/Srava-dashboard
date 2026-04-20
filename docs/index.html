@@ -8,313 +8,125 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #0d0d0f;
-    --surface: #16161a;
-    --surface2: #1e1e24;
-    --border: rgba(255,255,255,0.07);
-    --text: #f0efe8;
-    --text-muted: #7a7a82;
-    --text-dim: #4a4a52;
-    --accent: #e8f55a;
-    --accent-dark: #c8d830;
-    --teal: #1fd9a0;
-    --amber: #f5a623;
-    --blue: #4d9fff;
-    --red: #ff5c5c;
-    --font-head: 'Syne', sans-serif;
-    --font-mono: 'DM Mono', monospace;
+    --bg: #0d0d0f; --surface: #16161a; --surface2: #1e1e24;
+    --border: rgba(255,255,255,0.07); --text: #f0efe8;
+    --text-muted: #7a7a82; --text-dim: #4a4a52;
+    --accent: #e8f55a; --teal: #1fd9a0; --amber: #f5a623;
+    --blue: #4d9fff; --red: #ff5c5c; --purple: #c084fc;
+    --font-head: 'Syne', sans-serif; --font-mono: 'DM Mono', monospace;
   }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-mono);
-    min-height: 100vh;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; }
   body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
   }
+  .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; position: relative; z-index: 1; }
 
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 2.5rem 2rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 3rem;
-    gap: 1rem;
-  }
-
-  .logo-line {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
-  }
-
-  .strava-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: #fc4c02;
-    box-shadow: 0 0 12px #fc4c0260;
-    flex-shrink: 0;
-  }
-
-  .logo-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-
-  h1 {
-    font-family: var(--font-head);
-    font-size: clamp(26px, 4vw, 40px);
-    font-weight: 800;
-    color: var(--text);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-  }
-
+  /* Header */
+  .header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2rem; gap: 1rem; }
+  .logo-line { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .strava-dot { width: 10px; height: 10px; border-radius: 50%; background: #fc4c02; box-shadow: 0 0 12px #fc4c0260; flex-shrink: 0; }
+  .logo-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.15em; text-transform: uppercase; }
+  h1 { font-family: var(--font-head); font-size: clamp(26px,4vw,40px); font-weight: 800; color: var(--text); line-height: 1.1; letter-spacing: -0.02em; }
   h1 span { color: var(--accent); }
+  .subtitle { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+  .last-updated { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
 
-  .subtitle {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 8px;
-    letter-spacing: 0.05em;
-  }
+  /* Target banner */
+  .target-banner { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 1px; background: rgba(232,245,90,0.1); border: 1px solid rgba(232,245,90,0.2); border-radius: 12px; overflow: hidden; margin-bottom: 2.5rem; }
+  .target-cell { background: #111408; padding: 1rem 1.25rem; }
+  .target-label { font-size: 10px; color: rgba(232,245,90,0.5); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .target-value { font-family: var(--font-head); font-size: 22px; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; }
 
-  .last-updated {
-    font-size: 11px;
-    color: var(--text-dim);
-    margin-top: 4px;
-    letter-spacing: 0.05em;
-  }
-
-  .target-banner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(135deg, #1a1f0a 0%, #1a2010 100%);
-    border: 1px solid rgba(232,245,90,0.2);
-    border-radius: 10px;
-    padding: 1rem 1.25rem;
-    margin-bottom: 2.5rem;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .target-label {
-    font-size: 10px;
-    color: rgba(232,245,90,0.6);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-
-  .target-value {
-    font-family: var(--font-head);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: -0.02em;
-  }
-
-  .countdown-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
-
-  .countdown-unit {
-    background: rgba(232,245,90,0.08);
-    border: 1px solid rgba(232,245,90,0.15);
-    border-radius: 6px;
-    padding: 4px 10px;
-    text-align: center;
-    min-width: 52px;
-  }
-
-  .countdown-num {
-    font-family: var(--font-head);
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--accent);
-    display: block;
-  }
-
-  .countdown-lbl {
-    font-size: 9px;
-    color: rgba(232,245,90,0.5);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  #statusMsg {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
-    letter-spacing: 0.05em;
-    min-height: 18px;
-  }
-
+  /* Status */
+  #statusMsg { font-size: 12px; color: var(--text-muted); margin-bottom: 1.5rem; min-height: 18px; }
   #statusMsg::before { content: '▸ '; color: var(--accent); }
+  #errorMsg { background: rgba(255,92,92,0.08); border: 1px solid rgba(255,92,92,0.2); border-radius: 8px; padding: 1rem 1.25rem; font-size: 12px; color: var(--red); display: none; margin-bottom: 1rem; }
 
-  #errorMsg {
-    background: rgba(255,92,92,0.08);
-    border: 1px solid rgba(255,92,92,0.2);
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
-    font-size: 12px;
-    color: var(--red);
-    display: none;
-    margin-bottom: 1rem;
-  }
-
-  .stat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 2.5rem;
-  }
-
-  .stat-card {
-    background: var(--surface);
-    padding: 1.25rem;
-    transition: background 0.15s;
-  }
-
+  /* Stat grid */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 2.5rem; }
+  .stat-card { background: var(--surface); padding: 1.25rem; transition: background 0.15s; }
   .stat-card:hover { background: var(--surface2); }
-
-  .stat-label {
-    font-size: 10px;
-    color: var(--text-dim);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .stat-value {
-    font-family: var(--font-head);
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
-
+  .stat-label { font-size: 10px; color: var(--text-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+  .stat-value { font-family: var(--font-head); font-size: 24px; font-weight: 700; color: var(--text); line-height: 1; letter-spacing: -0.02em; }
   .stat-sub { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
   .stat-value.accent { color: var(--accent); }
   .stat-value.teal { color: var(--teal); }
   .stat-value.amber { color: var(--amber); }
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 1.25rem;
-  }
-
-  .section-title {
-    font-family: var(--font-head);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    white-space: nowrap;
-  }
-
+  /* Section header */
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+  .section-title { font-family: var(--font-head); font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
   .section-line { flex: 1; height: 1px; background: var(--border); }
 
-  .chart-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-  }
-
+  /* Chart */
+  .chart-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
   .chart-container { position: relative; width: 100%; height: 240px; }
-
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    padding: 0 0 1rem;
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; padding: 0 0 1rem; font-size: 11px; color: var(--text-muted); }
   .legend-item { display: flex; align-items: center; gap: 6px; }
   .legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
   .legend-line { width: 16px; height: 1px; flex-shrink: 0; }
 
-  .run-list {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-top: 2rem;
-  }
-
-  .run-item {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 12px;
-    align-items: center;
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--border);
-    transition: background 0.12s;
-  }
-
+  /* Run list */
+  .run-list { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 2rem; }
+  .run-item { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); transition: background 0.12s; }
   .run-item:last-child { border-bottom: none; }
   .run-item:hover { background: var(--surface2); }
-
-  .run-name {
-    font-family: var(--font-head);
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
-
-  .run-meta { font-size: 11px; color: var(--text-muted); letter-spacing: 0.03em; }
+  .run-name { font-family: var(--font-head); font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .run-meta { font-size: 11px; color: var(--text-muted); }
   .run-diff { font-size: 10px; margin-top: 4px; }
-
-  .run-pace {
-    font-family: var(--font-head);
-    font-size: 18px;
-    font-weight: 700;
-    text-align: right;
-    letter-spacing: -0.02em;
-  }
-
+  .run-pace { font-family: var(--font-head); font-size: 18px; font-weight: 700; text-align: right; letter-spacing: -0.02em; }
   .run-zone { font-size: 10px; color: var(--text-muted); text-align: right; margin-top: 2px; }
+
+  /* Schedule */
+  .schedule-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .week-row { border-bottom: 1px solid var(--border); }
+  .week-row:last-child { border-bottom: none; }
+  .week-row.is-current { border-left: 3px solid var(--accent); background: rgba(232,245,90,0.03); }
+  .week-header { display: grid; grid-template-columns: 110px 90px 1fr; gap: 12px; align-items: center; padding: 0.85rem 1.25rem; cursor: pointer; transition: background 0.12s; user-select: none; }
+  .week-header:hover { background: var(--surface2); }
+  .week-num { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: var(--text-muted); }
+  .week-num.current { color: var(--accent); }
+  .week-phase { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; text-align: center; white-space: nowrap; }
+  .phase-base  { background: rgba(77,159,255,0.12); color: var(--blue); }
+  .phase-build { background: rgba(245,166,35,0.12); color: var(--amber); }
+  .phase-peak  { background: rgba(255,92,92,0.12); color: var(--red); }
+  .phase-taper { background: rgba(31,217,160,0.12); color: var(--teal); }
+  .phase-race  { background: rgba(232,245,90,0.12); color: var(--accent); }
+  .week-meta { font-size: 12px; color: var(--text-muted); }
+  .week-meta .km { color: var(--text); font-weight: 500; }
+
+  .week-body { display: none; border-top: 1px solid var(--border); }
+  .week-body.open { display: block; }
+
+  .session-block { padding: 0.75rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.03); }
+  .session-block:last-child { border-bottom: none; }
+  .session-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .session-day-badge { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); width: 28px; flex-shrink: 0; }
+  .session-name { font-size: 13px; font-weight: 500; }
+  .stype-easy   { color: var(--blue); }
+  .stype-long   { color: var(--amber); }
+  .stype-tempo  { color: var(--purple); }
+  .stype-hill   { color: var(--red); }
+  .stype-rest   { color: var(--text-dim); }
+  .stype-taper  { color: var(--teal); }
+  .stype-race   { color: var(--accent); }
+
+  .session-targets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; padding-left: 38px; }
+  .target-pill { font-size: 10px; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.04em; }
+  .pill-dist  { background: rgba(77,159,255,0.1);  color: var(--blue); }
+  .pill-pace  { background: rgba(31,217,160,0.1);  color: var(--teal); }
+  .pill-hr    { background: rgba(255,92,92,0.1);   color: var(--red); }
+  .pill-effort{ background: rgba(245,166,35,0.1);  color: var(--amber); }
+  .pill-struct{ background: rgba(192,132,252,0.1); color: var(--purple); }
 
   @media (max-width: 600px) {
     .container { padding: 1.5rem 1rem; }
     .header { flex-direction: column; }
     h1 { font-size: 28px; }
-    .target-banner { flex-direction: column; gap: 16px; }
+    .week-header { grid-template-columns: 80px 70px 1fr; gap: 8px; }
   }
 </style>
 </head>
@@ -328,133 +140,435 @@
         <span class="logo-label">Strava · Auto-updated every 3 hrs</span>
       </div>
       <h1>Run <span>Dashboard</span></h1>
-      <p class="subtitle">Mitchell Ryan &nbsp;·&nbsp; TCS Sydney Marathon &nbsp;·&nbsp; 30 Aug 2026</p>
+      <p class="subtitle">Mitchell Ryan · TCS Sydney Marathon · 30 Aug 2026</p>
       <p class="last-updated" id="lastUpdated"></p>
     </div>
   </div>
 
   <div class="target-banner">
-    <div>
-      <div class="target-label">Goal</div>
-      <div class="target-value">Sub 3:14:59</div>
-    </div>
-    <div>
-      <div class="target-label">Target pace</div>
-      <div class="target-value">4:37 /km</div>
-    </div>
-    <div>
-      <div class="target-label">Easy ceiling</div>
-      <div class="target-value">5:52 /km</div>
-    </div>
-    <div>
-      <div class="target-label">Race day countdown</div>
-      <div class="countdown-wrap" id="countdown"></div>
-    </div>
+    <div class="target-cell"><div class="target-label">Goal</div><div class="target-value">Sub 3:14:59</div></div>
+    <div class="target-cell"><div class="target-label">Target pace</div><div class="target-value">4:37 /km</div></div>
+    <div class="target-cell"><div class="target-label">Easy pace</div><div class="target-value">5:45–6:10/km</div></div>
+    <div class="target-cell"><div class="target-label">Race day countdown</div><div class="target-value" id="countdown">–</div></div>
   </div>
 
   <div id="statusMsg">Loading activity data...</div>
   <div id="errorMsg"></div>
-
   <div id="statGrid" class="stat-grid" style="display:none;"></div>
 
   <div id="mainContent" style="display:none;">
     <div class="section-header">
-      <span class="section-title">Pace — last 10 runs</span>
+      <span class="section-title">Pace — training block</span>
       <div class="section-line"></div>
     </div>
     <div class="chart-wrap">
       <div class="legend" id="legend"></div>
-      <div class="chart-container">
-        <canvas id="paceChart" role="img" aria-label="Bar chart of recent run paces vs marathon target pace"></canvas>
-      </div>
+      <div class="chart-container"><canvas id="paceChart" role="img" aria-label="Pace chart for training block runs"></canvas></div>
     </div>
     <div class="section-header" style="margin-top:2rem;">
-      <span class="section-title">Recent runs</span>
+      <span class="section-title">Training block runs</span>
       <div class="section-line"></div>
     </div>
     <div class="run-list" id="runList"></div>
   </div>
 
+  <div style="margin-top:3rem;">
+    <div class="section-header">
+      <span class="section-title">Training schedule — 23 weeks</span>
+      <div class="section-line"></div>
+    </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:1rem;">Click any week to expand full session details. Current week highlighted in yellow.</p>
+    <div class="schedule-wrap" id="scheduleWrap"></div>
+  </div>
+
 </div>
 <script>
-const TARGET_SEC = 4*60+37, EASY_SEC = 5*60+52;
-const RACE_DATE = new Date('2026-08-30T07:00:00+10:00');
-let chartInstance = null;
+const TARGET_SEC=4*60+37, EASY_SEC=6*60+10;
+const RACE_DATE=new Date('2026-08-30T07:00:00+10:00');
+const BLOCK_START=new Date('2026-04-13T00:00:00+10:00');
+let chartInstance=null;
 
-function fmtPace(s) { const m=Math.floor(s/60),sec=Math.round(s%60); return m+':'+String(sec).padStart(2,'0')+'/km'; }
-function fmtDist(m) { return (m/1000).toFixed(2)+' km'; }
-function fmtDur(s) { const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60; return h>0?h+'h '+m+'m':m+'m '+sec+'s'; }
-function fmtDate(str) { return new Date(str).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}); }
+// ─────────────────────────────────────────────
+// TRAINING PLAN — 23 weeks from 23 Mar 2026
+// Mon: ~9km easy (daycare drop)
+// Tue: easy run
+// Wed: easy run
+// Thu: alternating tempo / hill (base weeks = hill only)
+// Fri: rest
+// Sat: long run
+// Sun: rest
+//
+// HR zones (estimated max HR ~185):
+// Z1 Easy:    65–75% = ~120–138 bpm
+// Z2 Aerobic: 75–80% = ~138–148 bpm
+// Z3 Tempo:   80–87% = ~148–161 bpm
+// Z4 Race:    87–92% = ~161–170 bpm
+// Z5 Hill:    88–93% = ~163–172 bpm
+// ─────────────────────────────────────────────
 
-function zone(sec) {
-  if (sec<=TARGET_SEC) return {label:'Race pace or faster',color:'#1fd9a0'};
-  if (sec<=TARGET_SEC+60) return {label:'Tempo zone',color:'#f5a623'};
-  if (sec<=EASY_SEC) return {label:'Easy-moderate',color:'#4d9fff'};
-  return {label:'Easy',color:'#7a7a82'};
+function s(day,type,name,dist,pace,hr,effort,struct){
+  return {day,type,name,dist,pace,hr,effort,struct};
 }
 
-function countdown() {
-  const diff = RACE_DATE - new Date();
-  if (diff<=0) { document.getElementById('countdown').innerHTML='<span class="target-value">Race day!</span>'; return; }
-  const days=Math.floor(diff/86400000), hrs=Math.floor((diff%86400000)/3600000), mins=Math.floor((diff%3600000)/60000);
-  document.getElementById('countdown').innerHTML=`
-    <div class="countdown-unit"><span class="countdown-num">${days}</span><span class="countdown-lbl">days</span></div>
-    <div class="countdown-unit"><span class="countdown-num">${hrs}</span><span class="countdown-lbl">hrs</span></div>
-    <div class="countdown-unit"><span class="countdown-num">${mins}</span><span class="countdown-lbl">min</span></div>`;
+// Helper abbreviations
+const E='easy', L='long', T='tempo', H='hill', R='rest', TAP='taper', RACE='race';
+
+const PLAN=[
+  // ── PHASE 1: BASE BUILD (Weeks 1–6) ──
+  // Thu = hills only, no tempo yet. Long runs conservative.
+  {week:1,start:'2026-03-23',phase:'base',km:44,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational, very easy',null),
+    s('Tue',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Should feel effortless',null),
+    s('Wed',E,'Easy run','6km','5:45–6:10/km','HR 120–138 bpm (Z1)','Shorter than Tuesday, stay easy',null),
+    s('Thu',H,'Hill repeats','8km total','Hard effort up, easy jog down','HR 163–172 bpm on reps (Z5)','6 × hill reps up your 350m local hill','Warm up 1.5km · 6 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest or light stretching',null),
+    s('Sat',L,'Long run','14km','5:45–6:10/km','HR 138–148 bpm (Z2, keep under 150)','Comfortable aerobic effort throughout','Fuel every 5km from week 5 onwards'),
+    s('Sun',R,'Rest','–','–','–','Recover before Monday run',null),
+  ]},
+  {week:2,start:'2026-03-30',phase:'base',km:45,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy effort',null),
+    s('Wed',E,'Easy run','6km','5:45–6:10/km','HR 120–138 bpm (Z1)','Shorter recovery run',null),
+    s('Thu',H,'Hill repeats','8km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','7 × hill reps','Warm up 1.5km · 7 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','14km','5:45–6:10/km','HR 138–148 bpm (Z2)','Steady aerobic pace',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:3,start:'2026-04-06',phase:'base',km:46,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','6km','5:45–6:10/km','HR 120–138 bpm (Z1)','Short and easy',null),
+    s('Thu',H,'Hill repeats','9km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','8 × hill reps','Warm up 1.5km · 8 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','14km','5:45–6:10/km','HR 138–148 bpm (Z2)','Keep HR honest — no drifting above 150',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:4,start:'2026-04-13',phase:'base',km:49,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational, no pushing',null),
+    s('Tue',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy effort',null),
+    s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Shorter than Tuesday',null),
+    s('Thu',H,'Hill repeats','9km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','8 × hill reps','Warm up 1.5km · 8 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','16km','5:45–6:10/km','HR 138–148 bpm (Z2)','First step up — stay patient with pace',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:5,start:'2026-04-20',phase:'base',km:50,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Short and easy',null),
+    s('Thu',H,'Hill repeats','10km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','9 × hill reps','Warm up 1.5km · 9 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','16km','5:45–6:10/km','HR 138–148 bpm (Z2)','Start practising fuelling every 5km',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:6,start:'2026-04-27',phase:'base',km:52,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',H,'Hill repeats','11km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','10 × hill reps — max hill volume','Warm up 1.5km · 10 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','16km','5:45–6:10/km','HR 138–148 bpm (Z2)','Comfortable aerobic, fuel every 5km',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+
+  // ── PHASE 2: BUILD (Weeks 7–14) ──
+  // Thu alternates tempo/hill. Long runs step up.
+  {week:7,start:'2026-05-04',phase:'build',km:55,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',T,'Tempo run','11km total','4:50–5:10/km tempo pace','HR 148–161 bpm (Z3)','First tempo — comfortably hard, short sentences only','Warm up 2km easy · 15 min tempo block · cool down 2km easy'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','18km','5:45–6:10/km','HR 138–148 bpm (Z2)','Fuel every 5km, keep Z2 throughout',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:8,start:'2026-05-11',phase:'build',km:56,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',H,'Hill repeats','11km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','8 × hill reps — maintaining hill work','Warm up 1.5km · 8 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','18km','5:45–6:10/km','HR 138–148 bpm (Z2)','Fuel every 5km',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:9,start:'2026-05-18',phase:'build',km:59,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','10km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',T,'Tempo run','12km total','4:50–5:10/km tempo','HR 148–161 bpm (Z3)','20 min tempo block','Warm up 2km · 20 min tempo · cool down 2km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','21km','5:45–6:10/km','HR 138–148 bpm (Z2)','First 21km — take it easy, fuel every 5km',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:10,start:'2026-05-25',phase:'build',km:60,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','10km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',H,'Hill repeats','11km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','9 × hill reps','Warm up 1.5km · 9 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','21km','5:45–6:10/km','HR 138–148 bpm (Z2)','Steady, fuel every 5km',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:11,start:'2026-06-01',phase:'build',km:50,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational — recovery week',null),
+    s('Tue',E,'Easy run','8km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy, lighter week',null),
+    s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Short and easy',null),
+    s('Thu',H,'Hill repeats','8km total','Moderate hill effort','HR 155–165 bpm (keep it easier this week)','6 × hill reps — recovery week, pull back effort','Warm up 1.5km · 6 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','18km','5:45–6:10/km','HR 138–148 bpm (Z2)','Recovery week long run — feel good, don\'t push',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:12,start:'2026-06-08',phase:'build',km:63,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','11km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',T,'Tempo run','12km total','4:50–5:10/km tempo','HR 148–161 bpm (Z3)','25 min tempo block — pushing the threshold','Warm up 2km · 25 min tempo · cool down 2km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','24km','5:45–6:10/km','HR 138–148 bpm (Z2)','Big step up — patience with pace, fuel every 5km',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:13,start:'2026-06-15',phase:'build',km:65,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','11km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',H,'Hill repeats','12km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','10 × hill reps','Warm up 1.5km · 10 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','24km','5:45–6:10/km','HR 138–148 bpm (Z2)','Hold even effort, fuel every 5km',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:14,start:'2026-06-22',phase:'build',km:67,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','12km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',T,'Tempo run','13km total','4:50–5:10/km tempo','HR 148–161 bpm (Z3)','30 min tempo block','Warm up 2km · 30 min tempo · cool down 2km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','26km','5:45–6:10/km','HR 138–148 bpm (Z2)','Longest to date — stick to easy pace, fuel every 5km',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+
+  // ── PHASE 3: PEAK (Weeks 15–20) ──
+  {week:15,start:'2026-06-29',phase:'peak',km:69,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','12km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','10km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',H,'Hill repeats','12km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','10 × hill reps','Warm up 1.5km · 10 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','28km','5:45–6:10/km','HR 138–148 bpm (Z2)','Mental focus session — break into 3 × 9km blocks',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:16,start:'2026-07-06',phase:'peak',km:55,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Recovery week — easy',''),
+    s('Tue',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy, lighter week',null),
+    s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Short and easy',null),
+    s('Thu',T,'Tempo run','10km total','4:50–5:10/km tempo','HR 148–161 bpm (Z3)','20 min tempo — lighter recovery week version','Warm up 2km · 20 min tempo · cool down 2km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','20km','5:45–6:10/km','HR 138–148 bpm (Z2)','Recovery week long run — feel fresh',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:17,start:'2026-07-13',phase:'peak',km:68,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','13km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','10km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',H,'Hill repeats','11km total','Hard effort up, jog down','HR 163–172 bpm on reps (Z5)','10 × hill reps — peak hill session','Warm up 1.5km · 10 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest — big day tomorrow',null),
+    s('Sat',L,'Long run','32km','5:45–6:10/km','HR 138–148 bpm (Z2)','Biggest run yet — fuel every 5km, break into segments mentally',null),
+    s('Sun',R,'Rest','–','–','–','Extended rest — 32km recovery',null),
+  ]},
+  {week:18,start:'2026-07-20',phase:'peak',km:70,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Keep it very easy after 32km Saturday',null),
+    s('Tue',E,'Easy run','13km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','10km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',T,'Tempo run','13km total','4:50–5:10/km tempo','HR 148–161 bpm (Z3)','35 min tempo — peak tempo effort','Warm up 2km · 35 min tempo · cool down 2km'),
+    s('Fri',R,'Rest','–','–','–','Full rest — peak long run tomorrow',null),
+    s('Sat',L,'Long run — PEAK','34km','5:45–6:10/km','HR 138–148 bpm (Z2)','PEAK RUN — fuel every 5km, walk 1 min at 20km if needed, finish strong',null),
+    s('Sun',R,'Rest','–','–','–','Extended rest — this is the most important recovery weekend of the block',null),
+  ]},
+  {week:19,start:'2026-07-27',phase:'peak',km:56,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Very easy after peak week',null),
+    s('Tue',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','7km','5:45–6:10/km','HR 120–138 bpm (Z1)','Short and easy',null),
+    s('Thu',H,'Hill repeats','9km total','Moderate-hard effort','HR 155–165 bpm (slightly easier post-peak)','6 × hill reps — recovery week','Warm up 1.5km · 6 reps · cool down 1.5km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run','22km','5:45–6:10/km','HR 138–148 bpm (Z2)','Recovery long run — feel strong, not tired',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:20,start:'2026-08-03',phase:'peak',km:59,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Conversational',null),
+    s('Tue',E,'Easy run','12km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Wed',E,'Easy run','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Easy',null),
+    s('Thu',T,'Tempo run','13km total','4:45–5:00/km tempo — starting to sharpen','HR 148–163 bpm (Z3–Z4 border)','30 min tempo at slightly sharper effort','Warm up 2km · 30 min tempo · cool down 2km'),
+    s('Fri',R,'Rest','–','–','–','Full rest — taper begins next week',null),
+    s('Sat',L,'Long run','16km','5:30–5:45/km — slightly sharper','HR 138–150 bpm (Z2)','Last moderate long run — feel race-ready',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+
+  // ── PHASE 4: TAPER (Weeks 21–22) ──
+  {week:21,start:'2026-08-10',phase:'taper',km:46,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:10/km','HR 120–138 bpm (Z1)','Taper begins — resist urge to do more',null),
+    s('Tue',TAP,'Taper easy run','8km','5:45–6:00/km','HR 120–138 bpm (Z1)','Easy and fresh',null),
+    s('Wed',TAP,'Taper easy run','6km','5:45–6:00/km','HR 120–138 bpm (Z1)','Short, easy, shake out the legs',null),
+    s('Thu',T,'Short tempo sharpener','8km total','4:45–5:00/km for tempo block','HR 148–158 bpm (Z3)','15 min tempo only — keep sharpness without fatigue','Warm up 2km · 15 min tempo · cool down 2km'),
+    s('Fri',R,'Rest','–','–','–','Full rest',null),
+    s('Sat',L,'Long run — taper','15km','5:30–5:45/km','HR 138–148 bpm (Z2)','Confidence run — should feel easy',null),
+    s('Sun',R,'Rest','–','–','–','Full rest',null),
+  ]},
+  {week:22,start:'2026-08-17',phase:'taper',km:30,sessions:[
+    s('Mon',E,'Easy run — daycare drop','9km','5:45–6:00/km','HR 120–138 bpm (Z1)','Very easy — final taper week',null),
+    s('Tue',TAP,'Taper easy run','6km','5:45–6:00/km','HR 120–138 bpm (Z1)','Easy, short',null),
+    s('Wed',TAP,'Taper easy run','5km','5:45–6:00/km','HR 120–138 bpm (Z1)','Very short shakeout',null),
+    s('Thu',TAP,'Sharpener','5km total','Include 4 × 1 min at race pace (4:35–4:40/km) with 2 min easy recovery','HR 161–170 bpm briefly (Z4) during strides','Short strides to remind legs of race pace','10 min easy warm up · 4 strides · 10 min easy cool down'),
+    s('Fri',R,'Rest','–','–','–','Full rest — race week starts Monday',null),
+    s('Sat',TAP,'Shakeout run','5km','5:45–6:00/km','HR 120–130 bpm (Z1)','Very easy shakeout — just wake up the legs',null),
+    s('Sun',R,'Rest','–','–','–','Rest, hydrate, eat well',null),
+  ]},
+
+  // ── RACE WEEK (Week 23) ──
+  {week:23,start:'2026-08-24',phase:'race',km:42,sessions:[
+    s('Mon',TAP,'Easy shakeout','4km','6:00/km','HR 120–130 bpm (Z1)','Very easy, stay loose',null),
+    s('Tue',R,'Rest','–','–','–','Full rest — trust your training',null),
+    s('Wed',TAP,'Easy shakeout','3km','6:00/km','HR 120–130 bpm (Z1)','Short, easy — just move the legs',null),
+    s('Thu',R,'Rest','–','–','–','Full rest — legs up when possible',null),
+    s('Fri',R,'Rest','–','–','–','Full rest — sleep, hydrate, eat carbs',null),
+    s('Sat',R,'Rest — race eve','–','–','–','Lay out race kit, eat your carb dinner, sleep early',null),
+    s('Sun',RACE,'RACE DAY — TCS Sydney Marathon','42.2km','4:35–4:40/km (sub 3:14:59 pace)','HR 161–170 bpm (Z4) — hold steady','Start conservatively, negative split, push from 30km','North Sydney → Harbour Bridge → CBD → Opera House'),
+  ]},
+];
+
+const PHASE_LABELS={base:'Base Build',build:'Build',peak:'Peak',taper:'Taper',race:'Race Week'};
+
+function fmtPace(s){const m=Math.floor(s/60),sec=Math.round(s%60);return m+':'+String(sec).padStart(2,'0')+'/km';}
+function fmtDist(m){return (m/1000).toFixed(2)+' km';}
+function fmtDur(s){const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;return h>0?h+'h '+m+'m':m+'m '+sec+'s';}
+function fmtDate(str){return new Date(str).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});}
+
+function zone(sec){
+  if(sec<=TARGET_SEC) return{label:'Race pace or faster',color:'#1fd9a0'};
+  if(sec<=TARGET_SEC+60) return{label:'Tempo zone',color:'#f5a623'};
+  if(sec<=EASY_SEC) return{label:'Easy-moderate',color:'#4d9fff'};
+  return{label:'Easy',color:'#7a7a82'};
 }
-countdown(); setInterval(countdown, 60000);
 
-async function loadData() {
-  try {
-    const res = await fetch('activities.json?t=' + Date.now());
-    if (!res.ok) throw new Error('activities.json not found — has the GitHub Action run yet?');
-    const activities = await res.json();
+function countdown(){
+  const diff=RACE_DATE-new Date();
+  if(diff<=0){document.getElementById('countdown').textContent='Race day!';return;}
+  const weeks=Math.floor(diff/(7*86400000));
+  const days=Math.floor((diff%(7*86400000))/86400000);
+  document.getElementById('countdown').textContent=weeks+'w '+days+'d';
+}
+countdown(); setInterval(countdown,60000);
 
-    const runs = activities.filter(a => a.type==='Run' || a.sport_type==='Run');
-    if (!runs.length) { document.getElementById('statusMsg').textContent = 'No runs found in data.'; return; }
+function getCurrentWeek(){
+  const now=new Date();
+  for(let i=PLAN.length-1;i>=0;i--){
+    if(now>=new Date(PLAN[i].start+'T00:00:00+10:00')) return PLAN[i].week;
+  }
+  return 1;
+}
 
-    // Last updated from most recent activity fetch
-    const fetchTime = new Date(res.headers.get('last-modified') || Date.now());
-    document.getElementById('lastUpdated').textContent = 'Data last fetched: ' + fetchTime.toLocaleDateString('en-AU', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+function pill(cls,text){return `<span class="target-pill ${cls}">${text}</span>`;}
 
-    const totalKm = runs.reduce((s,r)=>s+r.distance,0)/1000;
-    const avgPace = runs.reduce((s,r)=>s+r.moving_time/(r.distance/1000),0)/runs.length;
-    const longest = Math.max(...runs.map(r=>r.distance))/1000;
-    const totalElev = runs.reduce((s,r)=>s+(r.total_elevation_gain||0),0);
-    const diff = avgPace - TARGET_SEC;
+function buildSchedule(){
+  const currentWeek=getCurrentWeek();
+  const wrap=document.getElementById('scheduleWrap');
+  wrap.innerHTML=PLAN.map(w=>{
+    const isCurrent=w.week===currentWeek;
+    const startD=new Date(w.start+'T00:00:00+10:00');
+    const endD=new Date(startD); endD.setDate(endD.getDate()+6);
+    const dateRange=startD.toLocaleDateString('en-AU',{day:'numeric',month:'short'})+' – '+endD.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
 
-    const grid = document.getElementById('statGrid');
-    grid.style.display = 'grid';
-    grid.innerHTML = [
-      ['Runs loaded', runs.length, 'last 30 activities', ''],
-      ['Total distance', totalKm.toFixed(1)+' km', 'all runs combined', 'accent'],
-      ['Avg pace', fmtPace(avgPace), (diff>0?'+':'')+fmtPace(Math.abs(diff))+' vs target', avgPace<=TARGET_SEC?'teal':''],
-      ['Longest run', longest.toFixed(1)+' km', '', ''],
-      ['Total elevation', Math.round(totalElev)+' m', 'cumulative gain', 'amber']
+    const sessions=w.sessions.map(sess=>{
+      if(sess.type===R){
+        return `<div class="session-block">
+          <div class="session-header">
+            <span class="session-day-badge">${sess.day}</span>
+            <span class="session-name stype-rest">${sess.name}</span>
+          </div>
+        </div>`;
+      }
+      const typeClass='stype-'+(sess.type===T?'tempo':sess.type===H?'hill':sess.type===L?'long':sess.type==='race'?'race':sess.type==='taper'?'taper':'easy');
+      return `<div class="session-block">
+        <div class="session-header">
+          <span class="session-day-badge">${sess.day}</span>
+          <span class="session-name ${typeClass}">${sess.name}</span>
+        </div>
+        <div class="session-targets">
+          ${sess.dist!=='–'?pill('pill-dist',sess.dist):''}
+          ${sess.pace!=='–'?pill('pill-pace',sess.pace):''}
+          ${sess.hr!=='–'?pill('pill-hr',sess.hr):''}
+          ${sess.effort!=='–'?pill('pill-effort',sess.effort):''}
+          ${sess.struct?pill('pill-struct',sess.struct):''}
+        </div>
+      </div>`;
+    }).join('');
+
+    return `<div class="week-row${isCurrent?' is-current':''}">
+      <div class="week-header" onclick="toggleWeek(${w.week})">
+        <span class="week-num${isCurrent?' current':''}">Wk ${w.week}${isCurrent?' ◀':''}</span>
+        <span class="week-phase phase-${w.phase}">${PHASE_LABELS[w.phase]}</span>
+        <span class="week-meta"><span class="km">${w.km}km</span> · ${dateRange}</span>
+      </div>
+      <div class="week-body${isCurrent?' open':''}" id="week-body-${w.week}">${sessions}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleWeek(n){document.getElementById('week-body-'+n).classList.toggle('open');}
+
+async function loadData(){
+  try{
+    const res=await fetch('activities.json?t='+Date.now());
+    if(!res.ok) throw new Error('activities.json not found — has the GitHub Action run yet?');
+    const activities=await res.json();
+
+    const runs=activities
+      .filter(a=>(a.type==='Run'||a.sport_type==='Run')&&new Date(a.start_date_local)>=BLOCK_START)
+      .sort((a,b)=>new Date(b.start_date_local)-new Date(a.start_date_local));
+
+    document.getElementById('lastUpdated').textContent='Showing runs from training block (13 Apr 2026 onwards)';
+
+    if(!runs.length){
+      document.getElementById('statusMsg').textContent='No training block runs found yet.';
+      return;
+    }
+
+    const totalKm=runs.reduce((s,r)=>s+r.distance,0)/1000;
+    const avgPace=runs.reduce((s,r)=>s+r.moving_time/(r.distance/1000),0)/runs.length;
+    const longest=Math.max(...runs.map(r=>r.distance))/1000;
+    const totalElev=runs.reduce((s,r)=>s+(r.total_elevation_gain||0),0);
+    const diff=avgPace-TARGET_SEC;
+
+    const grid=document.getElementById('statGrid');
+    grid.style.display='grid';
+    grid.innerHTML=[
+      ['Block runs',runs.length,'since 13 Apr 2026',''],
+      ['Total distance',totalKm.toFixed(1)+' km','training block','accent'],
+      ['Avg pace',fmtPace(avgPace),(diff>0?'+':'')+fmtPace(Math.abs(diff))+' vs target',avgPace<=TARGET_SEC?'teal':''],
+      ['Longest run',longest.toFixed(1)+' km','',''],
+      ['Total elevation',Math.round(totalElev)+' m','cumulative gain','amber']
     ].map(([l,v,s,c])=>`<div class="stat-card"><div class="stat-label">${l}</div><div class="stat-value ${c}">${v}</div>${s?`<div class="stat-sub">${s}</div>`:''}</div>`).join('');
 
-    const recent = runs.slice(0,10).reverse();
-    const labels = recent.map(r=>new Date(r.start_date_local).toLocaleDateString('en-AU',{day:'numeric',month:'short'}));
-    const pacesMins = recent.map(r=>parseFloat((r.moving_time/(r.distance/1000)/60).toFixed(3)));
-    const barColors = recent.map(r=>zone(r.moving_time/(r.distance/1000)).color);
+    const chartRuns=runs.slice(0,10).reverse();
+    const labels=chartRuns.map(r=>new Date(r.start_date_local).toLocaleDateString('en-AU',{day:'numeric',month:'short'}));
+    const pacesMins=chartRuns.map(r=>parseFloat((r.moving_time/(r.distance/1000)/60).toFixed(3)));
+    const barColors=chartRuns.map(r=>zone(r.moving_time/(r.distance/1000)).color);
 
-    if (chartInstance) { chartInstance.destroy(); chartInstance=null; }
-    chartInstance = new Chart(document.getElementById('paceChart'), {
-      type: 'bar',
-      data: { labels, datasets: [
-        {label:'Avg pace', data:pacesMins, backgroundColor:barColors, borderRadius:4, borderSkipped:false},
-        {label:'Target 4:37/km', data:Array(recent.length).fill(parseFloat((TARGET_SEC/60).toFixed(3))), type:'line', borderColor:'#1fd9a0', borderDash:[6,3], borderWidth:1.5, pointRadius:0, fill:false},
-        {label:'Easy ceiling', data:Array(recent.length).fill(parseFloat((EASY_SEC/60).toFixed(3))), type:'line', borderColor:'#4a4a52', borderDash:[3,3], borderWidth:1, pointRadius:0, fill:false}
+    if(chartInstance){chartInstance.destroy();chartInstance=null;}
+    chartInstance=new Chart(document.getElementById('paceChart'),{
+      type:'bar',
+      data:{labels,datasets:[
+        {label:'Avg pace',data:pacesMins,backgroundColor:barColors,borderRadius:4,borderSkipped:false},
+        {label:'Target 4:37/km',data:Array(chartRuns.length).fill(parseFloat((TARGET_SEC/60).toFixed(3))),type:'line',borderColor:'#1fd9a0',borderDash:[6,3],borderWidth:1.5,pointRadius:0,fill:false},
+        {label:'Easy ceiling 6:10/km',data:Array(chartRuns.length).fill(parseFloat((EASY_SEC/60).toFixed(3))),type:'line',borderColor:'#4a4a52',borderDash:[3,3],borderWidth:1,pointRadius:0,fill:false}
       ]},
-      options: {
-        responsive:true, maintainAspectRatio:false,
-        plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>{
-          if(ctx.datasetIndex===0){return 'Pace: '+fmtPace(ctx.raw*60);}
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{
+          if(ctx.datasetIndex===0) return 'Pace: '+fmtPace(ctx.raw*60);
           return ctx.dataset.label;
         }}}},
-        scales: {
-          y: { reverse:true, grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#7a7a82', font:{family:"'DM Mono',monospace",size:11}, callback:v=>{const m=Math.floor(v),s=Math.round((v-m)*60);return m+':'+String(s).padStart(2,'0');}}},
-          x: { grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#7a7a82', font:{family:"'DM Mono',monospace",size:10}, maxRotation:45, autoSkip:false}}
+        scales:{
+          y:{reverse:true,grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#7a7a82',font:{family:"'DM Mono',monospace",size:11},callback:v=>{const m=Math.floor(v),s=Math.round((v-m)*60);return m+':'+String(s).padStart(2,'0');}}},
+          x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#7a7a82',font:{family:"'DM Mono',monospace",size:10},maxRotation:45,autoSkip:false}}
         }
       }
     });
@@ -467,15 +581,13 @@ async function loadData() {
       <div class="legend-item"><div class="legend-line" style="background:#1fd9a0;"></div>Target 4:37/km</div>
       <div class="legend-item"><div class="legend-line" style="background:#4a4a52;"></div>Easy ceiling</div>`;
 
-    document.getElementById('runList').innerHTML = runs.slice(0,15).map(r=>{
-      const paceSec=r.moving_time/(r.distance/1000), z=zone(paceSec), d=paceSec-TARGET_SEC;
-      const diffStr = d>0
-        ? `<span style="color:#f5a623;">+${fmtPace(d)} off target</span>`
-        : `<span style="color:#1fd9a0;">${fmtPace(Math.abs(d))} under target</span>`;
+    document.getElementById('runList').innerHTML=runs.map(r=>{
+      const paceSec=r.moving_time/(r.distance/1000),z=zone(paceSec),d=paceSec-TARGET_SEC;
+      const diffStr=d>0?`<span style="color:#f5a623;">+${fmtPace(d)} off target</span>`:`<span style="color:#1fd9a0;">${fmtPace(Math.abs(d))} under target</span>`;
       return `<div class="run-item">
         <div>
           <div class="run-name">${r.name}</div>
-          <div class="run-meta">${fmtDate(r.start_date_local)} &nbsp;·&nbsp; ${fmtDist(r.distance)} &nbsp;·&nbsp; ${fmtDur(r.moving_time)} &nbsp;·&nbsp; ${Math.round(r.total_elevation_gain||0)}m elev</div>
+          <div class="run-meta">${fmtDate(r.start_date_local)} · ${fmtDist(r.distance)} · ${fmtDur(r.moving_time)} · ${Math.round(r.total_elevation_gain||0)}m elev</div>
           <div class="run-diff">${diffStr}</div>
         </div>
         <div>
@@ -485,17 +597,18 @@ async function loadData() {
       </div>`;
     }).join('');
 
-    document.getElementById('statusMsg').textContent = '';
-    document.getElementById('mainContent').style.display = 'block';
+    document.getElementById('statusMsg').textContent='';
+    document.getElementById('mainContent').style.display='block';
 
-  } catch(e) {
-    document.getElementById('statusMsg').textContent = '';
-    const err = document.getElementById('errorMsg');
-    err.textContent = 'Error: ' + e.message;
-    err.style.display = 'block';
+  }catch(e){
+    document.getElementById('statusMsg').textContent='';
+    const err=document.getElementById('errorMsg');
+    err.textContent='Error: '+e.message;
+    err.style.display='block';
   }
 }
 
+buildSchedule();
 loadData();
 </script>
 </body>
